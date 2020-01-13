@@ -19,6 +19,8 @@
   "homepage": "https://github.com/devteamepic/arxiv-parser#readme",
   "dependencies": {
     "axios": "^0.19.1",
+    "express": "^4.17.1",
+    "request": "^2.88.0",
     "xml-js": "^1.6.11"
   }
 }
