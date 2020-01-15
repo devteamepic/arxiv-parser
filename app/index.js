@@ -48,7 +48,7 @@ axios.get('http://export.arxiv.org/api/query?search_query=all:electron')
 
     singleWork.title = prettifyFileName(singleWork.title)
 
-    const file = fs.createWriteStream(singleWork.title)
+    const file = fs.createWriteStream('./files/' + singleWork.title)
     new Promise((resolve, reject) => {
       request({
         uri: singleWork.downloadLink,
