@@ -16,32 +16,54 @@ app.listen(port, () => {
 axios.get('http://export.arxiv.org/api/query?search_query=all:electron')
   .then(response => {
     rawData = converter.xml2js(response.data, { compact: true, spaces: 2 }).feed
-    downloadLink = rawData.entry[0].link[2]._attributes.href
 
-    const file = fs.createWriteStream('file.pdf')
-    new Promise((resolve, reject) => {
-      request({
-        uri: downloadLink + '.pdf',
-        headers: {
-          'Accept-Encoding': 'gzip, deflate, br',
-          'Accept-Language': 'en-US,en;q=0.9,fr;q=0.8,ro;q=0.7,ru;q=0.6,la;q=0.5,pt;q=0.4,de;q=0.3',
-          'Cache-Control': 'max-age=0',
-          'Upgrade-Insecure-Requests': '1',
-          'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.106 Safari/537.36'
-        },
-        /* GZIP true for most of the websites now, disable it if you don't need it */
-        gzip: true
-      })
-        .pipe(file)
-        .on('finish', () => {
-          console.log('The file is finished downloading.')
-          resolve()
-        })
-        .on('error', (error) => {
-          reject(error)
-        })
-    })
-      .catch(error => {
-        console.log(`Something happened: ${error}`)
-      })
+    // var authors = []
+    // for (var i = 0; i < rawData.entry[0].author.length; i++) {
+    //   authors.push({ name: rawData.entry[0].author[i].name._text })
+    // }
+
+    // var output = {
+    //   id: rawData.entry[0].id._text,
+    //   lastUpdatedDate: rawData.entry[0].updated._text,
+    //   publishedDate: rawData.entry[0].published._text,
+    //   title: rawData.entry[0].title._text,
+    //   summary: rawData.entry[0].summary._text,
+    //   authors: authors,
+    //   downloadLink: rawData.entry[0].link[2]._attributes.href + '.pdf'
+    // }
+
+    // console.log(rawData.entry[0])
+    // console.log('----------')
+    // console.log(output)
+
+    console.log(rawData.entry[0]['arxiv:comment'])
+
+    // downloadLink = rawData.entry[0].link[2]._attributes.href
+
+    // const file = fs.createWriteStream('file.pdf')
+    // new Promise((resolve, reject) => {
+    //   request({
+    //     uri: downloadLink + '.pdf',
+    //     headers: {
+    //       'Accept-Encoding': 'gzip, deflate, br',
+    //       'Accept-Language': 'en-US,en;q=0.9,fr;q=0.8,ro;q=0.7,ru;q=0.6,la;q=0.5,pt;q=0.4,de;q=0.3',
+    //       'Cache-Control': 'max-age=0',
+    //       'Upgrade-Insecure-Requests': '1',
+    //       'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.106 Safari/537.36'
+    //     },
+    //     /* GZIP true for most of the websites now, disable it if you don't need it */
+    //     gzip: true
+    //   })
+    //     .pipe(file)
+    //     .on('finish', () => {
+    //       console.log('The file is finished downloading.')
+    //       resolve()
+    //     })
+    //     .on('error', (error) => {
+    //       reject(error)
+    //     })
+    // })
+    //   .catch(error => {
+    //     console.log(`Something happened: ${error}`)
+    //   })
   })
