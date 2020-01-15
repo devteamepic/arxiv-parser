@@ -2,9 +2,6 @@ const express = require('express')
 const axios = require('axios')
 const converter = require('xml-js')
 var rawData = null
-var downloadLink = null
-const fs = require('fs')
-const request = require('request')
 
 const app = express()
 const port = 3000
@@ -17,26 +14,25 @@ axios.get('http://export.arxiv.org/api/query?search_query=all:electron')
   .then(response => {
     rawData = converter.xml2js(response.data, { compact: true, spaces: 2 }).feed
 
-    // var authors = []
-    // for (var i = 0; i < rawData.entry[0].author.length; i++) {
-    //   authors.push({ name: rawData.entry[0].author[i].name._text })
-    // }
+    var authors = []
+    for (var i = 0; i < rawData.entry[0].author.length; i++) {
+      authors.push({ name: rawData.entry[0].author[i].name._text })
+    }
 
-    // var output = {
-    //   id: rawData.entry[0].id._text,
-    //   lastUpdatedDate: rawData.entry[0].updated._text,
-    //   publishedDate: rawData.entry[0].published._text,
-    //   title: rawData.entry[0].title._text,
-    //   summary: rawData.entry[0].summary._text,
-    //   authors: authors,
-    //   downloadLink: rawData.entry[0].link[2]._attributes.href + '.pdf'
-    // }
+    var output = {
+      id: rawData.entry[0].id._text,
+      lastUpdatedDate: rawData.entry[0].updated._text,
+      publishedDate: rawData.entry[0].published._text,
+      title: rawData.entry[0].title._text,
+      summary: rawData.entry[0].summary._text,
+      journalRef: rawData.entry[0]['arxiv:journal_ref']._text,
+      authors: authors,
+      downloadLink: rawData.entry[0].link[2]._attributes.href + '.pdf'
+    }
 
-    // console.log(rawData.entry[0])
-    // console.log('----------')
-    // console.log(output)
+    console.log(output)
 
-    console.log(rawData.entry[0]['arxiv:comment'])
+    // console.log(rawData.entry[0]['arxiv:comment'])
 
     // downloadLink = rawData.entry[0].link[2]._attributes.href
 
