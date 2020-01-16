@@ -22,6 +22,20 @@ const prettifyFileName = (str) => {
   return splittedString.join('') + '.pdf'
 }
 
+/**
+ * @param {string} str Removes newlines from the text
+ */
+const deleteNewLine = (str) => {
+  var newStr = ''
+  for (var i = 0; i < str.length; i++) {
+    if (!(str[i] === '\n' || str[i] === '\r')) {
+      newStr += str[i]
+    }
+  }
+
+  return newStr
+}
+
 app.listen(port, () => {
   console.log('app listens on port 3000')
 })
@@ -47,6 +61,7 @@ axios.get('http://export.arxiv.org/api/query?search_query=all:electron')
     }
 
     singleWork.title = prettifyFileName(singleWork.title)
+    singleWork.summary = deleteNewLine(singleWork.summary)
 
     const file = fs.createWriteStream('./files/' + singleWork.title)
     new Promise((resolve, reject) => {
