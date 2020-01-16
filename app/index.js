@@ -59,6 +59,9 @@ axios.get('http://export.arxiv.org/api/query?search_query=all:phd')
         authors.push({ name: rawData.entry[j].author[i].name._text })
       }
 
+      rawData.entry[j].title._text = deleteNewLine(rawData.entry[j].title._text)
+      rawData.entry[j].title._text = prettifyFileName(rawData.entry[j].title._text)
+
       var singleWork = {
         id: rawData.entry[j].id._text,
         lastUpdatedDate: rawData.entry[j].updated._text,
@@ -68,11 +71,9 @@ axios.get('http://export.arxiv.org/api/query?search_query=all:phd')
         // journalRef: rawData.entry[j]['arxiv:journal_ref']._text,
         authors: authors,
         downloadLink: downloadLinkHolder,
-        filePath: './files/' + rawData.entry[j].title._text + '.pdf'
+        filePath: './files/' + rawData.entry[j].title._text
       }
 
-      singleWork.title = deleteNewLine(singleWork.title)
-      singleWork.title = prettifyFileName(singleWork.title)
       singleWork.summary = deleteNewLine(singleWork.summary)
 
       allData.push(singleWork)
