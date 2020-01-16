@@ -3,9 +3,11 @@ const axios = require('axios')
 const converter = require('xml-js')
 const fs = require('fs')
 const request = require('request')
+const csvWriter = require('./csvWriter')
 
 var rawData = null
 var downloadLinkHolder = null
+var allData = []
 
 const app = express()
 const port = 3000
@@ -59,19 +61,21 @@ axios.get('http://export.arxiv.org/api/query?search_query=all:phd')
 
       var singleWork = {
         id: rawData.entry[j].id._text,
-        counter: j,
         lastUpdatedDate: rawData.entry[j].updated._text,
         publishedDate: rawData.entry[j].published._text,
         title: rawData.entry[j].title._text,
         summary: rawData.entry[j].summary._text,
         // journalRef: rawData.entry[j]['arxiv:journal_ref']._text,
         authors: authors,
-        downloadLink: downloadLinkHolder
+        downloadLink: downloadLinkHolder,
+        filePath: './files/' + rawData.entry[j].title._text + '.pdf'
       }
 
       singleWork.title = deleteNewLine(singleWork.title)
       singleWork.title = prettifyFileName(singleWork.title)
       singleWork.summary = deleteNewLine(singleWork.summary)
+
+      allData.push(singleWork)
 
       const file = fs.createWriteStream('./files/' + singleWork.title)
       console.log('Downloading: ' + singleWork.title)
@@ -101,4 +105,9 @@ axios.get('http://export.arxiv.org/api/query?search_query=all:phd')
           console.log(`Something happened: ${error}`)
         })
     }
+    csvWriter
+      .writeRecords(allData)
+      .then(() => {
+        console.log('data added to data.csv')
+      })
   })
