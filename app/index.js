@@ -59,6 +59,7 @@ axios.get('http://export.arxiv.org/api/query?search_query=all:phd')
 
       var singleWork = {
         id: rawData.entry[j].id._text,
+        counter: j,
         lastUpdatedDate: rawData.entry[j].updated._text,
         publishedDate: rawData.entry[j].published._text,
         title: rawData.entry[j].title._text,
@@ -68,13 +69,12 @@ axios.get('http://export.arxiv.org/api/query?search_query=all:phd')
         downloadLink: downloadLinkHolder
       }
 
-      console.log(singleWork)
-
       singleWork.title = deleteNewLine(singleWork.title)
       singleWork.title = prettifyFileName(singleWork.title)
       singleWork.summary = deleteNewLine(singleWork.summary)
 
       const file = fs.createWriteStream('./files/' + singleWork.title)
+      console.log('Downloading: ' + singleWork.title)
       new Promise((resolve, reject) => {
         request({
           uri: singleWork.downloadLink,
@@ -90,7 +90,7 @@ axios.get('http://export.arxiv.org/api/query?search_query=all:phd')
         })
           .pipe(file)
           .on('finish', () => {
-            console.log('The file ' + j + ' is finished downloading.')
+            console.log('The file is finished downloading.')
             resolve()
           })
           .on('error', (error) => {
