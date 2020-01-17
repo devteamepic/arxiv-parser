@@ -4,7 +4,7 @@ const csvWriter = createCsvWriter({
   path: 'data.csv',
   header: [
     { id: 'id', title: 'id' },
-    { id: 'lastUpdatedData', title: 'updatedDate' },
+    { id: 'lastUpdatedDate', title: 'updatedDate' },
     { id: 'publishedDate', title: 'publishedDate' },
     { id: 'title', title: 'title' },
     { id: 'summary', title: 'summary' },
