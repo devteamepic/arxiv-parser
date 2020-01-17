@@ -10,6 +10,9 @@ var downloadLinkHolder = null
 var allData = []
 var url = 'http://export.arxiv.org/api/query?search_query=all:phd&max_results='
 var amountOfData = 10
+var progress = 0
+var chunk = 0
+var fileCounter = 0
 
 const app = express()
 const port = 3000
@@ -43,12 +46,13 @@ const deleteNewLine = (str) => {
 
 app.listen(port, () => {
   if (process.argv[2] && process.argv[2] <= 1000) amountOfData = process.argv[2]
-  else {
+  else if (process.argv[2] && process.argv[2] > 1000) {
     console.log('The amount of data must not exceed 1000')
     return
   }
   console.log('app listens on port 3000')
   url += amountOfData
+  chunk = 100 / amountOfData
   fetchData()
 })
 
@@ -109,7 +113,10 @@ const fetchData = () => {
           })
             .pipe(file)
             .on('finish', () => {
-              console.log('The file is finished downloading.')
+              progress += chunk
+              fileCounter++
+              process.stdout.write('\r\x1b[K')
+              process.stdout.write('Progress: ' + progress + '% Files:' + fileCounter + ' / ' + amountOfData)
               resolve()
             })
             .on('error', (error) => {
