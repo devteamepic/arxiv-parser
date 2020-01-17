@@ -54,9 +54,14 @@ axios.get('http://export.arxiv.org/api/query?search_query=all:phd')
         }
       }
 
-      var authors = []
-      for (var i = 0; i < rawData.entry[j].author.length; i++) {
-        authors.push({ name: rawData.entry[j].author[i].name._text })
+      var authors = ''
+
+      if (!rawData.entry[j].author.length) {
+        authors = rawData.entry[j].author.name._text
+      } else {
+        for (var i = 0; i < rawData.entry[j].author.length; i++) {
+          authors += rawData.entry[j].author[i].name._text + ', '
+        }
       }
 
       rawData.entry[j].title._text = deleteNewLine(rawData.entry[j].title._text)
@@ -68,7 +73,6 @@ axios.get('http://export.arxiv.org/api/query?search_query=all:phd')
         publishedDate: rawData.entry[j].published._text,
         title: rawData.entry[j].title._text,
         summary: rawData.entry[j].summary._text,
-        // journalRef: rawData.entry[j]['arxiv:journal_ref']._text,
         authors: authors,
         downloadLink: downloadLinkHolder,
         filePath: './files/' + rawData.entry[j].title._text
