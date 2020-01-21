@@ -135,7 +135,7 @@ const fetchData = () => {
             .catch(error => {
               console.log(`Something happened: ${error}`)
             })
-        }, j * 1000)
+        }, j * 500)
       }
     })
 }
