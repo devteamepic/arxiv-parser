@@ -45,9 +45,9 @@ const deleteNewLine = (str) => {
 }
 
 app.listen(port, () => {
-  if (process.argv[2] && process.argv[2] <= 1000) amountOfData = process.argv[2]
-  else if (process.argv[2] && process.argv[2] > 1000) {
-    console.log('The amount of data must not exceed 1000')
+  if (process.argv[2] && process.argv[2] <= 3000) amountOfData = process.argv[2]
+  else if (process.argv[2] && process.argv[2] > 3000) {
+    console.log('The amount of data must not exceed 3000')
     return
   }
   console.log('app listens on port 3000')
