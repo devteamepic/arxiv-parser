@@ -129,20 +129,21 @@ const fetchData = () => {
                 resolve()
               })
               .on('error', (error) => {
-		csvWriter
+                csvWriter
                   .writeRecords(allData)
                   .then(() => {
                     console.log('\n data added to data.csv, Done!')
                   })
+                console.log('asdf')
                 reject(error)
               })
           })
             .catch(error => {
-		csvWriter
-                    .writeRecords(allData)
-                    .then(() => {
-                      console.log('\n data added to data.csv, Done!')
-                    })
+              csvWriter
+                .writeRecords(allData)
+                .then(() => {
+                  console.log('\n data added to data.csv, Done!')
+                })
               console.log(`Something happened: ${error}`)
             })
         }, j * 3500)
