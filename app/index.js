@@ -13,6 +13,7 @@ var progress = 0
 var chunk = 0
 var fileCounter = 0
 var allData = []
+var time = 10000
 
 const app = express()
 const port = 3000
@@ -114,6 +115,9 @@ const fetchData = () => {
             })
               .pipe(file)
               .on('finish', () => {
+                if (j % 100 === 0) {
+                  time += 600000
+                }
                 progress += chunk
                 fileCounter++
                 process.stdout.write('\r\x1b[K')
@@ -146,7 +150,7 @@ const fetchData = () => {
                 })
               console.log(`Something happened: ${error}`)
             })
-        }, j * 3500)
+        }, j * time)
       }
     })
 }
