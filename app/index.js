@@ -18,7 +18,7 @@ var j = 0
 
 const app = express()
 const port = 3000
-const separators = [' ', '\\+', '-', '\\(', '\\)', '\\*', '/', ':', '\\?']
+const separators = [' ', '\\+', '-', '\\(', '\\)', '\\*', '/', ':', '\\?', '&#92']
 const nullLink = {'link': undefined}
 
 /**
