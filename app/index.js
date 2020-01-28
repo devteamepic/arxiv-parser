@@ -14,10 +14,12 @@ var chunk = 0
 var fileCounter = 0
 var allData = []
 var time = 10000
+var j = 0
 
 const app = express()
 const port = 3000
 const separators = [' ', '\\+', '-', '\\(', '\\)', '\\*', '/', ':', '\\?']
+const nullLink = {'link': undefined}
 
 /**
  * @param {string} str Incoming document title name to prettify to CamelCaseStandard
@@ -54,16 +56,15 @@ app.listen(port, () => {
   console.log('app listens on port 3000')
   url += amountOfData
   chunk = 100 / amountOfData
-  fetchData()
+  fetchData(j)
 })
 
-const fetchData = () => {
+const fetchData = (j) => {
   axios.get(url)
     .then(response => {
       rawData = converter.xml2js(response.data, { compact: true, spaces: 2 }).feed
 
-      for (let j = 0; j < rawData.entry.length; j++) {
-        setTimeout(() => {
+	  if (typeof(rawData.entry[j].link) !== undefined) {
           for (var k = 0; k < rawData.entry[j].link.length; k++) {
             if (rawData.entry[j].link[k]._attributes.title === 'pdf') {
               downloadLinkHolder = rawData.entry[j].link[k]._attributes.href + '.pdf'
@@ -115,9 +116,9 @@ const fetchData = () => {
             })
               .pipe(file)
               .on('finish', () => {
-                if (j % 100 === 0) {
-                  time += 600000
-                }
+                // if (j % 100 === 0) {
+                //   time += 600000
+                // }
                 progress += chunk
                 fileCounter++
                 process.stdout.write('\r\x1b[K')
@@ -131,6 +132,13 @@ const fetchData = () => {
                     })
                 }
                 resolve()
+		j++
+		if (j < amountOfData) {
+			setTimeout(() => {
+				fetchData(j)
+			}, time)
+
+		}
               })
               .on('error', (error) => {
                 csvWriter
@@ -138,10 +146,15 @@ const fetchData = () => {
                   .then(() => {
                     console.log('\n data added to data.csv, Done!')
                   })
-                console.log('asdf')
                 reject(error)
               })
-          })
+              .on('socket', function(socket) {
+                socket.on('error', function (error) {
+                  console.log('asdfsadfasfd')
+                  reject(error);
+                });
+              });
+	})
             .catch(error => {
               csvWriter
                 .writeRecords(allData)
@@ -150,7 +163,13 @@ const fetchData = () => {
                 })
               console.log(`Something happened: ${error}`)
             })
-        }, j * time)
-      }
+	  } else {
+		  j++
+		  if (amountOfData > j) {
+			  setTimeout(() => {
+				  fetchData(j)
+			  }, time)
+		  }
+	  }
     })
 }
