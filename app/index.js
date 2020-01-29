@@ -163,7 +163,7 @@ const fetchData = (j) => {
                 })
               console.log(`Something happened: ${error}`)
             })
-	  } else if (false) {
+	  } else {
 		  j++
 		  if (amountOfData > j) {
 			  setTimeout(() => {
