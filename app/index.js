@@ -7,7 +7,7 @@ const csvWriter = require('./csvWriter')
 
 var rawData = null
 var downloadLinkHolder = null
-var url = 'http://export.arxiv.org/api/query?search_query=all:master&max_results='
+var url = 'http://export.arxiv.org/api/query?search_query=all:phd&max_results='
 var amountOfData = 10
 var progress = 0
 var chunk = 0
@@ -18,7 +18,7 @@ var j = 0
 
 const app = express()
 const port = 3000
-const separators = [' ', '\\+', '-', '\\(', '\\)', '\\*', '/', ':', '\\?', "\\", '\\$', '\\^']
+const separators = [' ', '\\+', '-', '\\(', '\\)', '\\*', '/', ':', '\\?']
 const nullLink = {'link': undefined}
 
 /**
@@ -64,7 +64,7 @@ const fetchData = (j) => {
     .then(response => {
       rawData = converter.xml2js(response.data, { compact: true, spaces: 2 }).feed
 
-	  if (typeof(rawData.entry[j].link) !== undefined) {
+	  if (rawData.entry[j] !== undefined && !rawData.entry[j].title._text.includes('$')) {
           for (var k = 0; k < rawData.entry[j].link.length; k++) {
             if (rawData.entry[j].link[k]._attributes.title === 'pdf') {
               downloadLinkHolder = rawData.entry[j].link[k]._attributes.href + '.pdf'
@@ -163,7 +163,7 @@ const fetchData = (j) => {
                 })
               console.log(`Something happened: ${error}`)
             })
-	  } else {
+	  } else if (false) {
 		  j++
 		  if (amountOfData > j) {
 			  setTimeout(() => {
