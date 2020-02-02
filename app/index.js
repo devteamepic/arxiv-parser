@@ -3,9 +3,11 @@ const converter = require('xml-js')
 const fs = require('fs')
 const request = require('request')
 const csvWriter = require('./csvWriter')
+const archiver = require('archiver')
 const separators = [' ', '\\+', '-', '\\(', '\\)', '\\*', '/', ':', '\\?']
 
 const time = 5000
+const output = fs.createWriteStream(__dirname + '/../data.zip')
 
 var rawData = null
 var downloadLinkHolder = null
@@ -16,6 +18,9 @@ var chunk = 0
 var fileCounter = 0
 var allData = []
 var j = 0
+var archive = archiver('zip', {
+  zlib: { level: 9 }
+})
 
 /**
  * @param {string} str Incoming document title name to prettify to CamelCaseStandard
@@ -111,6 +116,10 @@ const fetchData = (j) => {
                   .writeRecords(allData)
                   .then(() => {
                     console.log('\n data added to data.csv, Done!')
+                    const dataPath = __dirname + '/../data.csv'
+                    archive.directory(__dirname + '/../files/', 'files')
+                    archive.append(fs.createReadStream(dataPath), { name: 'data.csv' })
+                    archive.finalize()
                     resolve()
                   })
               }
@@ -164,4 +173,5 @@ else if (process.argv[2] && process.argv[2] > 3000) {
 }
 url += amountOfData
 chunk = 100 / amountOfData
+archive.pipe(output)
 fetchData(j)
