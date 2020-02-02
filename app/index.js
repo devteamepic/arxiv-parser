@@ -5,6 +5,8 @@ const request = require('request')
 const csvWriter = require('./csvWriter')
 const separators = [' ', '\\+', '-', '\\(', '\\)', '\\*', '/', ':', '\\?']
 
+const time = 5000
+
 var rawData = null
 var downloadLinkHolder = null
 var url = 'http://export.arxiv.org/api/query?search_query=all:master&max_results='
@@ -13,7 +15,6 @@ var progress = 0
 var chunk = 0
 var fileCounter = 0
 var allData = []
-var time = 10000
 var j = 0
 
 /**
@@ -115,7 +116,7 @@ const fetchData = (j) => {
               }
               resolve()
 		          j++
-		          if (j < amountOfData) {
+		          if (fileCounter < amountOfData) {
 		          	setTimeout(() => {
 		          		fetchData(j)
 		          	}, time)
@@ -145,8 +146,9 @@ const fetchData = (j) => {
               console.log(`Something happened: ${error}`)
             })
 	  } else {
+		amountOfData--
 		  j++
-		  if (amountOfData > j) {
+		  if (amountOfData > fileCounter) {
 			  setTimeout(() => {
 				  fetchData(j)
 			  }, time)
