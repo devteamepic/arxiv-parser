@@ -4,6 +4,7 @@ const fs = require('fs')
 const request = require('request')
 const csvWriter = require('./csvWriter')
 const archiver = require('archiver')
+const { google }
 const separators = [' ', '\\+', '-', '\\(', '\\)', '\\*', '/', ':', '\\?']
 
 const time = 5000
