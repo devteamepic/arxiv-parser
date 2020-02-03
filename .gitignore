@@ -2,3 +2,4 @@ node_modules
 files
 data.csv
 data.zip
+credentials.json
