@@ -78,7 +78,7 @@ function listFiles(auth) {
   }
   var media = {
       mimeType: 'archive/zip',
-      body: fs.createReadStream('../data.zip')
+      body: fs.createReadStream(__dirname + '.../data.zip')
   }
   drive.files.create({
       resource: metadata,
