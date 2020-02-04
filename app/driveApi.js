@@ -74,11 +74,11 @@ function listFiles(auth) {
   const drive = google.drive({version: 'v3', auth});
   
   var metadata = {
-      'name': 'data.zip'
+      'name': 'data2.zip'
   }
   var media = {
       mimeType: 'archive/zip',
-      body: fs.createReadStream(__dirname + '.../data.zip')
+      body: fs.createReadStream(__dirname + '/../data2.zip')
   }
   drive.files.create({
       resource: metadata,
