@@ -11,7 +11,7 @@ const output = fs.createWriteStream(__dirname + '/../data.zip')
 
 var rawData = null
 var downloadLinkHolder = null
-var url = 'http://export.arxiv.org/api/query?search_query=all:master&max_results='
+var url = 'http://export.arxiv.org/api/query?search_query=all:master&start=500&max_results='
 var amountOfData = 10
 var progress = 0
 var chunk = 0
