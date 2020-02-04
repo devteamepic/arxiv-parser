@@ -11,7 +11,7 @@ const output = fs.createWriteStream(__dirname + '/../data.zip')
 
 var rawData = null
 var downloadLinkHolder = null
-var url = 'http://export.arxiv.org/api/query?search_query=all:master&max_results='
+var url = 'http://export.arxiv.org/api/query?search_query=all:master&start=650&max_results='
 var amountOfData = 10
 var progress = 0
 var chunk = 0
@@ -21,6 +21,16 @@ var j = 0
 var archive = archiver('zip', {
   zlib: { level: 9 }
 })
+
+axios.interceptors.response.use(function (response) {
+    if (response.statusText !== 'OK') {
+        return Promise.reject(response);
+    }
+    return response;
+}, function (error) {
+    // Do something with response error
+    return Promise.reject(error);
+});
 
 /**
  * @param {string} str Incoming document title name to prettify to CamelCaseStandard
@@ -56,7 +66,9 @@ const fetchData = (j) => {
     .then(response => {
       rawData = converter.xml2js(response.data, { compact: true, spaces: 2 }).feed
 
-	    if (rawData.entry[j] !== undefined && !rawData.entry[j].title._text.includes('$')) {
+	    if (rawData.entry !== undefined && !rawData.entry[j].title._text.includes('$') &&
+	    	!rawData.entry[j].title._text.includes('`') && !rawData.entry[j].title._text.includes('"') &&
+	    	!rawData.entry[j].title._text.includes('^') && !rawData.entry[j].title._text.includes('{')) {
         for (var k = 0; k < rawData.entry[j].link.length; k++) {
           if (rawData.entry[j].link[k]._attributes.title === 'pdf') {
             downloadLinkHolder = rawData.entry[j].link[k]._attributes.href + '.pdf'
