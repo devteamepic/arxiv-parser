@@ -11,11 +11,7 @@ const output = fs.createWriteStream(__dirname + '/../data.zip')
 
 var rawData = null
 var downloadLinkHolder = null
-<<<<<<< HEAD
-var url = 'http://export.arxiv.org/api/query?search_query=all:master&start=500&max_results='
-=======
-var url = 'http://export.arxiv.org/api/query?search_query=all:master&start=650&max_results='
->>>>>>> 4af9a98cd61a69dce91bf00f258ccf5ad1828642
+var url = 'http://export.arxiv.org/api/query?search_query=all:master&start=2000&max_results='
 var amountOfData = 10
 var progress = 0
 var chunk = 0
@@ -28,11 +24,13 @@ var archive = archiver('zip', {
 
 axios.interceptors.response.use(function (response) {
     if (response.statusText !== 'OK') {
+	console.log('asdf')
         return Promise.reject(response);
     }
     return response;
 }, function (error) {
     // Do something with response error
+    console.log('asdfasdfadsf')
     return Promise.reject(error);
 });
 
@@ -69,38 +67,39 @@ const fetchData = (j) => {
   axios.get(url)
     .then(response => {
       rawData = converter.xml2js(response.data, { compact: true, spaces: 2 }).feed
+		const data = rawData.entry
 
-	    if (rawData.entry !== undefined && !rawData.entry[j].title._text.includes('$') &&
-	    	!rawData.entry[j].title._text.includes('`') && !rawData.entry[j].title._text.includes('"') &&
-	    	!rawData.entry[j].title._text.includes('^') && !rawData.entry[j].title._text.includes('{')) {
-        for (var k = 0; k < rawData.entry[j].link.length; k++) {
-          if (rawData.entry[j].link[k]._attributes.title === 'pdf') {
-            downloadLinkHolder = rawData.entry[j].link[k]._attributes.href + '.pdf'
+	    if (data[j].hasOwnProperty('title') && !data[j].title._text.includes('$') &&
+	    	!data[j].title._text.includes('`') && !data[j].title._text.includes('"') &&
+	    	!data[j].title._text.includes('^') && !data[j].title._text.includes('{')) {
+        for (var k = 0; k < data[j].link.length; k++) {
+          if (data[j].link[k]._attributes.title === 'pdf') {
+            downloadLinkHolder = data[j].link[k]._attributes.href + '.pdf'
           }
         }
 
         var authors = ''
 
-        if (!rawData.entry[j].author.length) {
-          authors = rawData.entry[j].author.name._text
+        if (!data[j].author.length) {
+          authors = data[j].author.name._text
         } else {
-          for (var i = 0; i < rawData.entry[j].author.length; i++) {
-            authors += rawData.entry[j].author[i].name._text + ', '
+          for (var i = 0; i < data[j].author.length; i++) {
+            authors += data[j].author[i].name._text + ', '
           }
         }
 
-        rawData.entry[j].title._text = deleteNewLine(rawData.entry[j].title._text)
-        rawData.entry[j].title._text = prettifyFileName(rawData.entry[j].title._text)
+        data[j].title._text = deleteNewLine(data[j].title._text)
+        data[j].title._text = prettifyFileName(data[j].title._text)
 
         var singleWork = {
-          id: rawData.entry[j].id._text,
-          lastUpdatedDate: rawData.entry[j].updated._text,
-          publishedDate: rawData.entry[j].published._text,
-          title: rawData.entry[j].title._text,
-          summary: rawData.entry[j].summary._text,
+          id: data[j].id._text,
+          lastUpdatedDate: data[j].updated._text,
+          publishedDate: data[j].published._text,
+          title: data[j].title._text,
+          summary: data[j].summary._text,
           authors: authors,
           downloadLink: downloadLinkHolder,
-          filePath: './files/' + rawData.entry[j].title._text
+          filePath: './files/' + data[j].title._text
         }
 
         singleWork.summary = deleteNewLine(singleWork.summary)
@@ -180,6 +179,14 @@ const fetchData = (j) => {
 		  }
 	  }
     })
+	.catch(error => {
+amountOfData--
+j++
+if (amountOfData > fileCounter) {
+	setTimeout(() => {
+		fetchData(j)
+}, time
+}
 }
 
 if (process.argv[2] && process.argv[2] <= 3000) amountOfData = process.argv[2]
