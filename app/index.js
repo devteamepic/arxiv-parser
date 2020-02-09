@@ -187,7 +187,8 @@ const fetchData = (j) => {
 				fetchData(j)
 			}, time)
 		}
-	})
+  })
+}
 
 if (process.argv[2] && process.argv[2] <= 3000) amountOfData = process.argv[2]
 else if (process.argv[2] && process.argv[2] > 3000) {
