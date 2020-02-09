@@ -11,7 +11,7 @@ const output = fs.createWriteStream(__dirname + '/../data.zip')
 
 var rawData = null
 var downloadLinkHolder = null
-var url = 'http://export.arxiv.org/api/query?search_query=all:master&start=2000&max_results='
+var url = 'http://export.arxiv.org/api/query?search_query=all:thesis+AND+all:physics&max_results='
 var amountOfData = 10
 var progress = 0
 var chunk = 0
@@ -180,14 +180,14 @@ const fetchData = (j) => {
 	  }
     })
 	.catch(error => {
-amountOfData--
-j++
-if (amountOfData > fileCounter) {
-	setTimeout(() => {
-		fetchData(j)
-}, time
-}
-}
+		amountOfData--
+		j++
+		if (amountOfData > fileCounter) {
+			setTimeout(() => {
+				fetchData(j)
+			}, time)
+		}
+	})
 
 if (process.argv[2] && process.argv[2] <= 3000) amountOfData = process.argv[2]
 else if (process.argv[2] && process.argv[2] > 3000) {
