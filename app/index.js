@@ -6,7 +6,7 @@ const csvWriter = require('./csvWriter')
 const archiver = require('archiver')
 const separators = [' ', '\\+', '-', '\\(', '\\)', '\\*', '/', ':', '\\?']
 
-const time = 5000
+const time = 2500
 const output = fs.createWriteStream(__dirname + '/../data.zip')
 
 var rawData = null
