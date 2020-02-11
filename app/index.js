@@ -30,7 +30,7 @@ axios.interceptors.response.use(function (response) {
     return response;
 }, function (error) {
     // Do something with response error
-    console.log('asdfasdfadsf')
+    console.log('asdfasdfadsfIM HEREiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiijk:jk')
     return Promise.reject(error);
 });
 
