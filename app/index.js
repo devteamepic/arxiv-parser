@@ -67,7 +67,7 @@ const fetchData = (j) => {
   axios.get(url)
     .then(response => {
       rawData = converter.xml2js(response.data, { compact: true, spaces: 2 }).feed
-		const data = rawData.entry
+      const data = rawData.entry
 
 	    if (data[j].hasOwnProperty('title') && !data[j].title._text.includes('$') &&
 	    	!data[j].title._text.includes('`') && !data[j].title._text.includes('"') &&
@@ -97,7 +97,8 @@ const fetchData = (j) => {
           publishedDate: data[j].published._text,
           title: data[j].title._text,
           summary: data[j].summary._text,
-          authors: authors,
+          category: data[j].category.term,
+          metaData: data[j]['arxiv:comment']._text,
           downloadLink: downloadLinkHolder,
           filePath: './files/' + data[j].title._text
         }
