@@ -21,7 +21,7 @@ start the downloading files and put them in ```files``` directory, then it will 
 | ```summary```         | sbit*                                                   |
 | ```authors```         | one or more authors                                     |
 | ```category```        | category by arxiv categories                            |
-| ```metadData```       | miscalanious info about article (num of pages and etc.) |
+| ```metaData```        | miscalanious info about article (num of pages and etc.)  |
 | ```downloadLink```    | arxiv link to ```.pdf``` document                       |
 | ```filePath```        | path of downloaded file in ```./files``` directory      |
 
