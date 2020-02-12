@@ -52,9 +52,12 @@ const prettifyFileName = (str) => {
  * @param {string} str 
  */
 const prettifySummary = (str) => {
-  str = str.replace(';', ',')
-
-  return str
+  var splittedString = str.toLowerCase().split(new RegExp(separators.join('|'), 'g'))
+  for (var i = 0; i < splittedString.length; i++) {
+    splittedString[i] = splittedString[i].charAt(0).toUpperCase() + splittedString[i].substring(1)
+  }
+  
+  return splittedString.join(' ')
 }
 
 /**
