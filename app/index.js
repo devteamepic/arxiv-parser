@@ -35,6 +35,7 @@ axios.interceptors.response.use(function (response) {
 });
 
 /**
+ * Function to adjust filenames to CamelCaseStandard
  * @param {string} str Incoming document title name to prettify to CamelCaseStandard
  */
 const prettifyFileName = (str) => {
@@ -47,7 +48,17 @@ const prettifyFileName = (str) => {
 }
 
 /**
- * @param {string} str Removes newlines from the text
+ * Function to adjust summary to some standard
+ * @param {string} str 
+ */
+const prettifySummary = (str) => {
+  str = str.replace(';', ',')
+
+  return str
+}
+
+/**
+ * @param {string} str 
  */
 const deleteNewLine = (str) => {
   var newStr = ''
@@ -68,6 +79,14 @@ const fetchData = (j) => {
     .then(response => {
       rawData = converter.xml2js(response.data, { compact: true, spaces: 2 }).feed
       const data = rawData.entry
+
+//       for (let i = 0; i < data.length; i++) {
+//         if (data[i].category[0]) {
+//           console.log(data[i].category[0]._attributes.term)
+//         } else {
+//           console.log(data[i].category._attributes.term)
+//         }
+//       }
 
 	    if (data[j].hasOwnProperty('title') && !data[j].title._text.includes('$') &&
 	    	!data[j].title._text.includes('`') && !data[j].title._text.includes('"') &&
@@ -97,13 +116,15 @@ const fetchData = (j) => {
           publishedDate: data[j].published._text,
           title: data[j].title._text,
           summary: data[j].summary._text,
-          category: data[j].category.term,
+          authors: authors,
+          category:data[j].category[0] ? data[j].category[0]._attributes.term : data[j].category._attributes.term,
           metaData: data[j]['arxiv:comment']._text,
           downloadLink: downloadLinkHolder,
           filePath: './files/' + data[j].title._text
         }
 
         singleWork.summary = deleteNewLine(singleWork.summary)
+        singleWork.summary = prettifySummary(singleWork.summary)
 
         allData.push(singleWork)
 
