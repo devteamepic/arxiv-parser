@@ -96,9 +96,7 @@ const fetchData = (j) => {
 //         }
 //       }
 
-	    if (data[j].hasOwnProperty('title') && !data[j].title._text.includes('$') &&
-	    	!data[j].title._text.includes('`') && !data[j].title._text.includes('"') &&
-	    	!data[j].title._text.includes('^') && !data[j].title._text.includes('{')) {
+	    if (data[j].hasOwnProperty('title') && data[j].title._text.includes('\\')){
         for (var k = 0; k < data[j].link.length; k++) {
           if (data[j].link[k]._attributes.title === 'pdf') {
             downloadLinkHolder = data[j].link[k]._attributes.href + '.pdf'
