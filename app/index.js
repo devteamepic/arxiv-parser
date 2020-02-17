@@ -11,7 +11,7 @@ const output = fs.createWriteStream(__dirname + '/../data.zip')
 
 var rawData = null
 var downloadLinkHolder = null
-var url = 'http://export.arxiv.org/api/query?search_query=all:thesis+AND+all:physics&max_results='
+var url = 'http://export.arxiv.org/api/query?search_query=all:thesis+AND+all:CoRR&max_results='
 var amountOfData = 10
 var progress = 0
 var chunk = 0
@@ -30,8 +30,13 @@ axios.interceptors.response.use(function (response) {
     return response;
 }, function (error) {
     // Do something with response error
-    console.log('asdfasdfadsfIM HEREiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiijk:jk')
-    return Promise.reject(error);
+    amountOfData--
+    j++
+    if (amountOfData > fileCounter) {
+	setTimeout(() => {
+	    fetchData(j)
+	}, time)
+    }
 });
 
 /**
