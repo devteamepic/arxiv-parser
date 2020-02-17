@@ -87,6 +87,7 @@ const fetchData = (j) => {
     .then(response => {
       rawData = converter.xml2js(response.data, { compact: true, spaces: 2 }).feed
       const data = rawData.entry
+console.log(data)
 
 //       for (let i = 0; i < data.length; i++) {
 //         if (data[i].category[0]) {
@@ -96,7 +97,8 @@ const fetchData = (j) => {
 //         }
 //       }
 
-	    if (data[j].hasOwnProperty('title') && data[j].title._text.includes('\\')){
+	    if (data[j].entry.hasOwnProperty('title') && data[j].title._text.includes('\\')){
+console.log('working')
         for (var k = 0; k < data[j].link.length; k++) {
           if (data[j].link[k]._attributes.title === 'pdf') {
             downloadLinkHolder = data[j].link[k]._attributes.href + '.pdf'
@@ -198,6 +200,7 @@ const fetchData = (j) => {
               console.log(`Something happened: ${error}`)
             })
 	  } else {
+		console.log('in else statement')
 		amountOfData--
 		  j++
 		  if (amountOfData > fileCounter) {
@@ -208,6 +211,7 @@ const fetchData = (j) => {
 	  }
     })
 	.catch(error => {
+		console.log(error)
 		amountOfData--
 		j++
 		if (amountOfData > fileCounter) {
