@@ -30,8 +30,13 @@ axios.interceptors.response.use(function (response) {
     return response;
 }, function (error) {
     // Do something with response error
-    console.log('asdfasdfadsfIM HEREiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiijk:jk')
-    return Promise.reject(error);
+    amountOfData--
+    j++
+    if (amountOfData > fileCounter) {
+	setTimeout(() => {
+	    fetchData(j)
+	}, time)
+    }
 });
 
 /**
