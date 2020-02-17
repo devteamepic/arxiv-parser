@@ -83,9 +83,7 @@ const deleteNewLine = (str) => {
  * @param {int} j The amount of iterations of recursion
  */
 const fetchData = (j) => {
-  console.log('in fetch data')
   if (data[j].hasOwnProperty('title') && !data[j].title._text.includes('\\')){
-    console.log('in if statement')
     for (var k = 0; k < data[j].link.length; k++) {
       if (data[j].link[k]._attributes.title === 'pdf') {
         downloadLinkHolder = data[j].link[k]._attributes.href + '.pdf'
@@ -187,7 +185,6 @@ const fetchData = (j) => {
         console.log(`Something happened: ${error}`)
       })
   } else {
-    console.log('in else statement')
 	  amountOfData--
 	  j++
 	  if (amountOfData > fileCounter) {
