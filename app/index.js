@@ -11,7 +11,7 @@ const output = fs.createWriteStream(__dirname + '/../data.zip')
 
 var data = null
 var downloadLinkHolder = null
-var url = 'http://export.arxiv.org/api/query?search_query=all:thesis+AND+all:computer&max_results='
+var url = 'http://export.arxiv.org/api/query?search_query=all:thesis+AND+all:biology&max_results='
 var amountOfData = 10
 var progress = 0
 var chunk = 0
@@ -83,7 +83,7 @@ const deleteNewLine = (str) => {
  * @param {int} j The amount of iterations of recursion
  */
 const fetchData = (j) => {
-  if (data[j].hasOwnProperty('title') && !data[j].title._text.includes('\\')){
+  if (data[j] !== undefined && data[j].hasOwnProperty('title') && !data[j].title._text.includes('\\')){
     for (var k = 0; k < data[j].link.length; k++) {
       if (data[j].link[k]._attributes.title === 'pdf') {
         downloadLinkHolder = data[j].link[k]._attributes.href + '.pdf'

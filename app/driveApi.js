@@ -74,7 +74,7 @@ function listFiles(auth) {
   const drive = google.drive({version: 'v3', auth});
   
   var metadata = {
-      'name': 'dataPhysics.zip'
+      'name': 'dataComputerScience.zip'
   }
   var media = {
       mimeType: 'archive/zip',
