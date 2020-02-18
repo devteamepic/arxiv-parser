@@ -30,6 +30,7 @@ axios.interceptors.response.use(function (response) {
     return response;
 }, function (error) {
     // Do something with response error
+    console.log(`error in axios: ${error}`)
     amountOfData--
     j++
     if (amountOfData > fileCounter) {
@@ -83,7 +84,12 @@ const deleteNewLine = (str) => {
  * @param {int} j The amount of iterations of recursion
  */
 const fetchData = (j) => {
-  if (data[j] !== undefined && data[j].hasOwnProperty('title') && !data[j].title._text.includes('\\')){
+	for (let i = 0; i < amountOfData; i++){
+		console.log(data[i].title)
+	}
+return
+
+  if (data[j].hasOwnProperty('title') && !data[j].title._text.includes('\\')){
     for (var k = 0; k < data[j].link.length; k++) {
       if (data[j].link[k]._attributes.title === 'pdf') {
         downloadLinkHolder = data[j].link[k]._attributes.href + '.pdf'
@@ -162,6 +168,7 @@ const fetchData = (j) => {
 	        }
         })
         .on('error', (error) => {
+	console.log(`error occured: ${error}`)
           csvWriter
             .writeRecords(allData)
             .then(() => {
@@ -185,6 +192,7 @@ const fetchData = (j) => {
         console.log(`Something happened: ${error}`)
       })
   } else {
+	console.log('in else statement')
 	  amountOfData--
 	  j++
 	  if (amountOfData > fileCounter) {
@@ -209,4 +217,13 @@ axios.get(url)
     data = data.entry
 
     fetchData(j)
+  })
+  .catch(error => {
+    amountOfData--
+    j++
+    if (amountOfData > fileCounter) {
+      setTimeout(() => {
+	fetchData(j)
+      }, time)
+    }
   })
