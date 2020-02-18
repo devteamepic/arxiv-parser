@@ -7,13 +7,13 @@ const csvWriter = require('./csvWriter')
 
 var rawData = null
 var downloadLinkHolder = null
-var url = 'http://export.arxiv.org/api/query?search_query=all:master&max_results='
+var url = 'http://export.arxiv.org/api/query?search_query=all:phd&max_results='
 var amountOfData = 10
 var progress = 0
 var chunk = 0
 var fileCounter = 0
 var allData = []
-var time = 10000
+var time = 60000
 
 const app = express()
 const port = 3000
