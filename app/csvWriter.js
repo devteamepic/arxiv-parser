@@ -9,9 +9,12 @@ const csvWriter = createCsvWriter({
     { id: 'title', title: 'title' },
     { id: 'summary', title: 'summary' },
     { id: 'authors', title: 'authors' },
+    { id: 'category', title: 'category' },
+    { id: 'metaData', title: 'metaData' },
     { id: 'downloadLink', title: 'downloadLink' },
     { id: 'filePath', title: 'filePath' }
-  ]
+  ],
+  fieldDelimiter: ';'
 })
 
 module.exports = csvWriter
