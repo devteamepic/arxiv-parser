@@ -84,11 +84,6 @@ const deleteNewLine = (str) => {
  * @param {int} j The amount of iterations of recursion
  */
 const fetchData = (j) => {
-	for (let i = 0; i < amountOfData; i++){
-		console.log(data[i].title)
-	}
-return
-
   if (data[j].hasOwnProperty('title') && !data[j].title._text.includes('\\')){
     for (var k = 0; k < data[j].link.length; k++) {
       if (data[j].link[k]._attributes.title === 'pdf') {
